@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GuestProyekController;
 
 //Route::get('/', function () {
@@ -11,3 +12,9 @@ use App\Http\Controllers\GuestProyekController;
 Route::get('/guest/proyek', [GuestProyekController::class, 'index'])->name('guest.proyek');
 
 
+Route::post('question/store', [AuthController::class, 'store'])
+		->name('question.store');
+
+Route::get('/auth/login', [AuthController::class, 'index']);
+
+Route::post('/auth/login', [AuthController::class, 'login']);
