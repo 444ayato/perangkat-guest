@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProyekController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuestProyekController;
 
 //Route::get('/', function () {
@@ -18,3 +20,9 @@ Route::post('question/store', [AuthController::class, 'store'])
 Route::get('/auth/login', [AuthController::class, 'index']);
 
 Route::post('/auth/login', [AuthController::class, 'login']);
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('guest.dashboard');
+
+Route::resource('proyek', ProyekController::class);
+
+Route::get('/', fn() => redirect()->route('proyek.index'));
