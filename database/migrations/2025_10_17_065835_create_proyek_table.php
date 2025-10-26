@@ -16,7 +16,7 @@ return new class extends Migration
     $table->string('kode_proyek')->unique();
     $table->string('nama_proyek');
     $table->year('tahun');
-    $table->string('lokasi')->nullable()->change();         
+    $table->string('lokasi')->nullable();        
     $table->bigInteger('anggaran');
     $table->string('sumber_dana');
     $table->text('deskripsi')->nullable();
