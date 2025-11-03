@@ -13,7 +13,7 @@ class ProyekController extends Controller
     public function index()
     {
         $proyek = Proyek::orderBy('created_at', 'desc')->get();
-        return view('guest.proyek.index', compact('proyek'));
+        return view('pages.proyek.index', compact('proyek'));
     }
 
     /**
@@ -21,7 +21,7 @@ class ProyekController extends Controller
      */
     public function create()
     {
-        return view('guest.proyek.create');
+        return view('pages.proyek.create');
     }
 
     /**
@@ -52,7 +52,7 @@ class ProyekController extends Controller
     public function show($id)
     {
         $proyek = Proyek::findOrFail($id);
-        return view('guest.proyek.show', compact('proyek'));
+        return view('pages.proyek.show', compact('proyek'));
     }
 
     /**
@@ -61,7 +61,7 @@ class ProyekController extends Controller
     public function edit($id)
     {
         $proyek = Proyek::findOrFail($id);
-        return view('guest.proyek.edit', compact('proyek'));
+        return view('pages.proyek.edit', compact('proyek'));
     }
 
     /**

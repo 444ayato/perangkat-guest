@@ -16,22 +16,22 @@ use App\Http\Controllers\GuestProyekController;
 Route::get('/guest/proyek', [GuestProyekController::class, 'index'])->name('guest.proyek');
 
 
-Route::get('/login', [LoginController::class, 'index'])->name('guest.login');
+Route::get('/', [LoginController::class, 'index'])->name('guest.login');
 Route::post('/login-proses', [LoginController::class, 'loginProses'])->name('login.proses');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('guest.dashboard');
 
-Route::post('question/store', [AuthController::class, 'store'])
-		->name('question.store');
+// Route::post('question/store', [AuthController::class, 'store'])
+// 		->name('question.store');
 
-//Route::get('/auth/login', [AuthController::class, 'index']);
+Route::get('/auth/login', [AuthController::class, 'index']);
 
-//Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/login', [AuthController::class, 'login']);
 
-//Route::get('/dashboard', [DashboardController::class, 'index'])->name('guest.dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('guest.dashboard');
 
 Route::resource('proyek', ProyekController::class);
 
-Route::get('/', fn() => redirect()->route('proyek.index'));
+Route::get('/data-proyek', fn() => redirect()->route('proyek.index'));
 
 Route::resource('users', UserController::class);

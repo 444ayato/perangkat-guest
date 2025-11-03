@@ -10,11 +10,11 @@ class UserController extends Controller
 {
     public function index() {
         $users = User::latest()->paginate(10);
-        return view('guest.user.index', compact('users'));
+        return view('pages.user.index', compact('users'));
     }
 
     public function create() {
-        return view('guest.user.create');
+        return view('pages.user.create');
     }
 
     public function store(Request $request) {
@@ -32,7 +32,7 @@ class UserController extends Controller
     }
 
     public function edit(User $user) {
-        return view('guest.user.edit', compact('user'));
+        return view('pages.user.edit', compact('user'));
     }
 
     public function update(Request $request, User $user) {

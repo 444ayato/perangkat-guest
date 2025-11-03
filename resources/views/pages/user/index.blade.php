@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.guest.app')
 @section('content')
 <div class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -15,13 +15,13 @@
     <div class="row">
         @forelse ($users as $user)
             <div class="col-md-6 col-lg-4 mb-4">
-                <div class="border rounded shadow-sm p-4 text-center h-100" 
+                <div class="border rounded shadow-sm p-4 text-center h-100"
                      style="border: 1px solid #dcdcdc; background-color: #ffffff;">
-                    
+
                     <div class="mb-3">
                         <i class="fa fa-user-circle text-primary" style="font-size: 60px;"></i>
                     </div>
-                    
+
                     <h5 class="fw-bold mb-1">{{ $user->name }}</h5>
                     <p class="text-muted mb-4">{{ $user->email }}</p>
 
