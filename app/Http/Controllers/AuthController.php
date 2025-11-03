@@ -31,10 +31,11 @@ class AuthController extends Controller
     }
 
     // Logout
-    public function logout(Request $request)
+      public function logout(Request $request)
     {
-        $request->session()->flush();
-        \Illuminate\Support\Facades\Auth::logout();
-        return redirect('/')->with('success', 'Anda telah logout.');
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect()->route('guest.login');
     }
 }
