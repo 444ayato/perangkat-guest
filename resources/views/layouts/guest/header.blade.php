@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Dashboard - Pembangunan & Monitoring Proyek</title>
+  <title>@yield('title', 'Dashboard - Pembangunan & Monitoring Proyek')</title>
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
   <!-- Favicons -->
@@ -27,94 +27,99 @@
   <link rel="stylesheet" href="{{ asset('assets-guest/css/colors/blue.css') }}">
 
   <style>
-    .intro-section {
-      position: relative;
-      background: url('{{ asset('assets-guest/img/slider_02.png') }}') center center / cover no-repeat;
-      padding: 140px 20px;
-      color: #fff;
-      text-align: center;
-      overflow: hidden;
+    /* Custom topbar */
+    .topbar {
+      background-color: #3498db;
+      padding: 10px 0;
     }
-    .intro-section::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.55);
-      z-index: 0;
+    .topbar .container {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
     }
-    .intro-section .container {
-      position: relative;
-      z-index: 1;
+
+    /* Header section */
+    header.header {
+      background-color: #fff;
+      border-bottom: 2px solid #3498db;
+      padding: 10px 0;
     }
-    .intro-section h1 {
-      font-size: 42px;
-      font-weight: 700;
-      margin-bottom: 20px;
+
+    .site-title h4 {
+      font-weight: 900;
+      font-size: 26px;
+      color: #333;
     }
-    .intro-section p {
-      font-size: 18px;
-      max-width: 700px;
-      margin: 0 auto 25px;
-      line-height: 1.6;
+
+    .site-title span {
+      color: #3498db;
     }
-    .intro-section .dmbutton {
-      display: inline-block;
-      background: #007bff;
-      color: #fff;
-      padding: 12px 28px;
-      border-radius: 50px;
+
+    #jetmenu li a {
       font-weight: 600;
-      text-decoration: none;
-      transition: 0.3s;
     }
-    .intro-section .dmbutton:hover {
-      background: #0056b3;
+
+    /* Welcome message */
+    .welcome-text {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .welcome-text h2 {
+      font-weight: 700;
+      color: #333;
+    }
+
+    .welcome-text p {
+      color: #555;
     }
   </style>
 </head>
 
 <body>
 
-<!-- Topbar -->
-<div class="topbar clearfix" style="background-color: #3498db; padding: 10px 0;">
-  <div class="container d-flex align-items-center">
-    <div class="social_buttons" style="display: flex; gap: 12px; align-items: center;"></div>
-    <a href="{{ url('/logout') }}" class="btn btn-danger btn-sm" style="">
-      Logout
-    </a>
+  <!-- Topbar -->
+  <div class="topbar clearfix">
+    <div class="container">
+      <a href="{{ url('/logout') }}"
+         class="btn btn-danger btn-sm"
+         style="font-weight: 600; padding: 6px 14px;">
+        Logout
+      </a>
+    </div>
   </div>
-</div>
 
-<!-- Header / Navbar -->
-<header class="header">
-  <div class="container">
-    <div class="site-header clearfix">
-      <div class="col-lg-3 col-md-3 col-sm-12 title-area">
-        <div class="site-title" id="title">
+  <!-- Header / Navbar -->
+  <header class="header">
+    <div class="container">
+      <div class="site-header clearfix d-flex justify-content-between align-items-center flex-wrap">
+
+        <!-- Logo / Title -->
+        <div class="site-title">
           <a href="{{ url('/dashboard') }}">
             <h4>E-<span>PROYEK</span></h4>
           </a>
         </div>
-      </div>
 
-      <div class="col-lg-9 col-md-9 col-sm-12">
-        <div id="nav" class="right">
-          <div class="container clearfix">
-            <ul id="jetmenu" class="jetmenu blue">
-              <li class="active"><a href="{{ url('/dashboard') }}">Home</a></li>
-              <li><a href="{{ route('proyek.index') }}">Data Proyek</a></li>
-              <li><a href="{{ route('users.index') }}">Manajemen User</a></li>
-              <li><a href="#">Tentang</a></li>
-              <li><a href="#">Kontak</a></li>
-            </ul>
-          </div>
-        </div>
+        <!-- Navigation -->
+        <nav id="nav">
+          <ul id="jetmenu" class="jetmenu blue">
+            <li class="{{ request()->is('dashboard') ? 'active' : '' }}">
+              <a href="{{ url('/dashboard') }}">Home</a>
+            </li>
+            <li><a href="{{ route('proyek.index') }}">Data Proyek</a></li>
+            <li><a href="{{ route('users.index') }}">Manajemen User</a></li>
+            <li><a href="#">Tentang</a></li>
+            <li><a href="#">Kontak</a></li>
+          </ul>
+        </nav>
+
       </div>
     </div>
-  </div>
 
-  <div class="container text-center mt-5">
-    <h2>Selamat Datang, {{ session('user')->name ?? 'User' }}!</h2>
-    <p>Anda berhasil login ke Dashboard.</p>
-  </div>
-</header>
+    <!-- Welcome Section -->
+    <div class="container welcome-text">
+      <h2>Selamat Datang, {{ session('user')->name ?? 'User' }}!</h2>
+      <p>Anda berhasil login ke Dashboard.</p>
+    </div>
+  </header>

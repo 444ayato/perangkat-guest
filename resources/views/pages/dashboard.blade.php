@@ -11,8 +11,7 @@
             Kelola, pantau, dan evaluasi seluruh proyek pembangunan Anda dalam satu sistem terpadu.
             Efisien, transparan, dan mudah digunakan.
           </p>
-          <a href="{{ route('proyek.index') }}">
-          </a>
+          <a href="{{ route('proyek.index') }}"></a>
         </div>
       </div>
     </div>
@@ -72,4 +71,43 @@
       </div>
     </div>
   </section>
+
+  <!-- 🔘 Floating WhatsApp Button -->
+  <img src="{{ asset('assets/img/whatsapp-icon.png') }}" class="whatsapp-float" alt="WhatsApp">
+  <a href="https://wa.me/6285156845682?text=Halo%20Admin,%20saya%20ingin%20bertanya%20tentang%20Proyek."
+     target="_blank"
+     class="whatsapp-float"
+     title="Hubungi via WhatsApp">
+    <i class="fa fa-whatsapp my-float"></i>
+  </a>
+
+  <style>
+    /* Floating WhatsApp Button */
+    .whatsapp-float {
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      bottom: 25px;
+      right: 25px;
+      background-color: #25d366;
+      color: #fff;
+      border-radius: 50%;
+      text-align: center;
+      font-size: 32px;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .whatsapp-float:hover {
+      transform: scale(1.1);
+      box-shadow: 2px 4px 12px rgba(0,0,0,0.3);
+      color: #fff;
+      text-decoration: none;
+    }
+
+    .whatsapp-float .my-float {
+      margin-top: 14px;
+    }
+  </style>
 @endsection

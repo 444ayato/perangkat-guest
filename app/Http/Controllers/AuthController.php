@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -17,7 +16,7 @@ class AuthController extends Controller
     public function loginProses(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required',
         ]);
 
@@ -34,9 +33,8 @@ class AuthController extends Controller
     // Logout
     public function logout(Request $request)
     {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect()->route('guest.login');
+        $request->session()->flush();
+        \Illuminate\Support\Facades\Auth::logout();
+        return redirect('/')->with('success', 'Anda telah logout.');
     }
 }

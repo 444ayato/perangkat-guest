@@ -1,7 +1,5 @@
 @include('layouts.guest.header')
 
-
-
 <body>
 
     {{-- MAIN CONTENT --}}

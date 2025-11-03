@@ -35,3 +35,5 @@ Route::resource('proyek', ProyekController::class);
 Route::get('/data-proyek', fn() => redirect()->route('proyek.index'));
 
 Route::resource('users', UserController::class);
+
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
