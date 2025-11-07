@@ -36,4 +36,8 @@ Route::get('/data-proyek', fn() => redirect()->route('proyek.index'));
 
 Route::resource('users', UserController::class);
 
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout.get');
+
+Route::get('/about', function () {
+    return view('pages.about.index');
+})->name('about');

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.guest.app')
 
 @section('content')
 <div class="container">
@@ -6,7 +6,7 @@
 
     <form action="{{ route('users.update', $user) }}" method="POST">
         @method('PUT')
-        @include('guest.user.form', ['buttonText' => 'Perbarui', 'user' => $user])
+        @include('pages.user.form', ['buttonText' => 'Perbarui', 'user' => $user])
     </form>
 </div>
 @endsection
