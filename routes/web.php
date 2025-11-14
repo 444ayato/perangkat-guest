@@ -16,10 +16,10 @@ use App\Http\Controllers\GuestProyekController;
 Route::get('/guest/proyek', [GuestProyekController::class, 'index'])->name('guest.proyek');
 
 
-Route::get('/', [ProyekController::class, 'index'])->name('proyek.index');
+//Route::get('/', [LoginController::class, 'index'])->name('guest.login');
 Route::post('/login-proses', [LoginController::class, 'loginProses'])->name('login.proses');
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('guest.dashboard');
+Route::get('/', [DashboardController::class, 'index'])->name('guest.dashboard');
 
 // Route::post('question/store', [AuthController::class, 'store'])
 // 		->name('question.store');
