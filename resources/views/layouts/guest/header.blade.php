@@ -102,13 +102,12 @@
         <div class="container">
             <!-- Tombol Logout (kiri) -->
             <a href="{{ url('/logout') }}" class="btn btn-danger btn-sm"
-               style="font-weight: 600; padding: 6px 14px;">Logout</a>
+                style="font-weight: 600; padding: 6px 14px;">Logout</a>
 
             <!-- Foto Profil (kanan) -->
             <img src="https://i.pinimg.com/originals/48/0a/d4/480ad4ef2dcf7f924f96bbd83fb2ff22.jpg"
-                 alt="Profile Picture"
-                 class="profile-pic">
-                 <span class="profile-name">Halo, {{ session('user')->name ?? 'User' }}!</span>
+                alt="Profile Picture" class="profile-pic">
+            <span class="profile-name">Halo, {{ session('user')->name ?? 'User' }}!</span>
         </div>
     </div>
 
@@ -130,6 +129,7 @@
                             <a href="{{ url('/dashboard') }}">Home</a>
                         </li>
                         <li><a href="{{ route('proyek.index') }}">Data Proyek</a></li>
+                        <li><a href="{{ route('tahapan.index') }}">Tahapan Proyek</a></li>
                         <li><a href="{{ route('users.index') }}">Manajemen User</a></li>
                         <li><a href="{{ route('about') }}">Tentang</a></li>
                         <li><a href="#">Kontak</a></li>
@@ -140,11 +140,12 @@
 
         <!-- 🔹 Welcome Section (Hanya di Dashboard) -->
         @if (request()->is('dashboard'))
-        <div class="container welcome-text">
-            <h2>Selamat Datang, {{ session('user')->name ?? 'User' }}!</h2>
-            <p>Anda berhasil login ke Dashboard.</p>
-        </div>
+            <div class="container welcome-text">
+                <h2>Selamat Datang, {{ session('user')->name ?? 'User' }}!</h2>
+                <p>Anda berhasil login ke Dashboard.</p>
+            </div>
         @endif
     </header>
 </body>
+
 </html>

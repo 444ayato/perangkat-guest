@@ -1,13 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Models\TahapanProyek;
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProyekController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuestProyekController;
+use App\Http\Controllers\TahapanProyekController;
 
 //Route::get('/', function () {
 //    return view('welcome');
@@ -41,3 +43,5 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout.get');
 Route::get('/about', function () {
     return view('pages.about.index');
 })->name('about');
+
+Route::resource('tahapan', TahapanProyekController::class);
