@@ -4,23 +4,25 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Faker\Factory as Faker;
 
 class TahapanProyekSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        DB::table('tahapan_proyek')->insert([
-            [
-                'proyek_id' => 1,
-                'nama_tahap' => 'Perencanaan',
-                'target_persen' => 20,
-                'tgl_mulai' => '2024-01-10',
-                'tgl_selesai' => '2024-02-10',
-            ]
-        ]);
+        $faker = Faker::create('id_ID');
+        $data = [];
+
+        for ($i = 1; $i <= 100; $i++) {
+            $data[] = [
+                'proyek_id'     => rand(1, 100),
+                'nama_tahap'    => 'Tahapan ' . $faker->word(),
+                'target_persen' => rand(1, 100),
+                'tgl_mulai'     => $faker->dateTimeBetween('-1 year', 'now'),
+                'tgl_selesai'   => $faker->dateTimeBetween('now', '+1 year'),
+            ];
+        }
+
+        DB::table('tahapan_proyek')->insert($data);
     }
 }

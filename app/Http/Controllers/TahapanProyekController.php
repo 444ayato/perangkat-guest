@@ -9,26 +9,45 @@ use App\Models\TahapanProyek;
 class TahapanProyekController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource (Pagination + Search + Filter).
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = TahapanProyek::with('proyek')->get();
-        return view('pages/tahapan.index', compact('data'));
+        // Ambil parameter search & filter
+        $search = $request->search;
+        $filterProyek = $request->proyek_id;
+
+        // Query dasar
+        $query = TahapanProyek::with('proyek');
+
+        // Search (nama tahap & nama proyek)
+        if (!empty($search)) {
+            $query->where('nama_tahap', 'like', "%$search%")
+                ->orWhereHas('proyek', function ($q) use ($search) {
+                    $q->where('nama_proyek', 'like', "%$search%");
+                });
+        }
+
+        // Filter berdasarkan proyek
+        if (!empty($filterProyek)) {
+            $query->where('proyek_id', $filterProyek);
+        }
+
+        // Pagination 10 data per halaman
+        $data = $query->orderBy('tgl_mulai', 'desc')->paginate(10);
+
+        // Untuk dropdown filter
+        $proyek = Proyek::all();
+
+        return view('pages.tahapan.index', compact('data', 'proyek', 'search', 'filterProyek'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $proyek = Proyek::all();
-        return view('pages/tahapan.create', compact('proyek'));
+        return view('pages.tahapan.create', compact('proyek'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -44,28 +63,14 @@ class TahapanProyekController extends Controller
         return redirect()->route('tahapan.index')->with('success', 'Data berhasil ditambahkan!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(TahapanProyek $tahapanProyek)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(TahapanProyek $id)
+    public function edit($id)
     {
         $data = TahapanProyek::findOrFail($id);
         $proyek = Proyek::all();
-        return view('pages/tahapan.edit', compact('data', 'proyek'));
+        return view('pages.tahapan.edit', compact('data', 'proyek'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, TahapanProyek $id)
+    public function update(Request $request, $id)
     {
         $request->validate([
             'proyek_id' => 'required',
@@ -81,10 +86,7 @@ class TahapanProyekController extends Controller
         return redirect()->route('tahapan.index')->with('success', 'Data berhasil diupdate!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(TahapanProyek $id)
+    public function destroy($id)
     {
         TahapanProyek::findOrFail($id)->delete();
         return redirect()->route('tahapan.index')->with('success', 'Data berhasil dihapus!');

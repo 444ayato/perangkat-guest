@@ -8,8 +8,26 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
-    public function index() {
-        $users = User::latest()->paginate(10);
+    public function index(Request $request)
+    {
+        $query = User::query();
+
+        // Search by Name or Email
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('name', 'like', "%{$request->search}%")
+                  ->orWhere('email', 'like', "%{$request->search}%");
+            });
+        }
+
+        // Filter Role (opsional jika ada kolom role)
+        if ($request->role) {
+            $query->where('role', $request->role);
+        }
+
+        // Pagination
+        $users = $query->latest()->paginate(9)->withQueryString();
+
         return view('pages.user.index', compact('users'));
     }
 
@@ -42,21 +60,13 @@ class UserController extends Controller
             'password' => 'nullable|string|min:6|confirmed',
         ]);
 
-        // Cek password lama jika email tetap sama
-        if ($request->email === $user->email && $request->filled('current_password')) {
-            if (!Hash::check($request->current_password, $user->password)) {
-                return back()->withErrors(['current_password' => 'Password lama salah.'])->withInput();
-            }
-        }
-
-        $user->name = $validated['name'];
-        $user->email = $validated['email'];
-
         if (!empty($validated['password'])) {
-            $user->password = Hash::make($validated['password']);
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
         }
 
-        $user->save();
+        $user->update($validated);
 
         return redirect()->route('users.index')->with('success', 'User berhasil diperbarui.');
     }

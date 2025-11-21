@@ -26,7 +26,7 @@ Route::get('/', [DashboardController::class, 'index'])->name('guest.dashboard');
 // Route::post('question/store', [AuthController::class, 'store'])
 // 		->name('question.store');
 
-Route::get('/auth/login', [AuthController::class, 'index']);
+Route::get('/auth/login', [AuthController::class, 'index'])->name('guest.login');
 
 Route::post('/auth/login', [AuthController::class, 'login']);
 

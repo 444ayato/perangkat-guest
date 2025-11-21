@@ -8,25 +8,48 @@ use Illuminate\Http\Request;
 class ProyekController extends Controller
 {
     /**
-     * Tampilkan daftar proyek.
+     * Tampilkan daftar proyek (Guest + Admin)
+     * lengkap dengan Search, Filter, dan Pagination.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $proyek = Proyek::orderBy('created_at', 'desc')->get();
-        return view('pages.proyek.index', compact('proyek'));
+        $query = Proyek::orderBy('created_at', 'desc');
+
+        // Search by Nama Proyek / Kode Proyek
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('nama_proyek', 'like', '%' . $request->search . '%')
+                  ->orWhere('kode_proyek', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Filter Tahun
+        if ($request->tahun) {
+            $query->where('tahun', $request->tahun);
+        }
+
+        // Filter Lokasi
+        if ($request->lokasi) {
+            $query->where('lokasi', 'like', '%' . $request->lokasi . '%');
+        }
+
+        // Pagination
+        $proyek = $query->paginate(5)->withQueryString();
+
+        // Data dropdown Tahun
+        $tahunList = Proyek::select('tahun')
+            ->groupBy('tahun')
+            ->orderBy('tahun', 'desc')
+            ->pluck('tahun');
+
+        return view('pages.proyek.index', compact('proyek', 'tahunList'));
     }
 
-    /**
-     * Tampilkan form tambah proyek.
-     */
     public function create()
     {
         return view('pages.proyek.create');
     }
 
-    /**
-     * Simpan proyek baru ke database.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -46,33 +69,25 @@ class ProyekController extends Controller
             ->with('success', 'Data proyek berhasil ditambahkan!');
     }
 
-    /**
-     * Tampilkan detail proyek.
-     */
     public function show($id)
     {
         $proyek = Proyek::findOrFail($id);
         return view('pages.proyek.show', compact('proyek'));
     }
 
-    /**
-     * Tampilkan form edit proyek.
-     */
     public function edit($id)
     {
         $proyek = Proyek::findOrFail($id);
         return view('pages.proyek.edit', compact('proyek'));
     }
 
-    /**
-     * Update data proyek.
-     */
     public function update(Request $request, $id)
     {
         $proyek = Proyek::findOrFail($id);
 
         $validated = $request->validate([
-            'kode_proyek' => 'required|max:20|unique:proyek,kode_proyek,' . $proyek->proyek_id . ',proyek_id',
+            'kode_proyek' =>
+                'required|max:20|unique:proyek,kode_proyek,' . $proyek->proyek_id . ',proyek_id',
             'nama_proyek' => 'required|string|max:255',
             'lokasi'      => 'required|string|max:255',
             'tahun'       => 'nullable|digits:4|integer|min:2000|max:' . (date('Y') + 1),
@@ -88,9 +103,6 @@ class ProyekController extends Controller
             ->with('success', 'Data proyek berhasil diperbarui!');
     }
 
-    /**
-     * Hapus proyek.
-     */
     public function destroy($id)
     {
         Proyek::findOrFail($id)->delete();
