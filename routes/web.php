@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\TahapanProyek;
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
@@ -11,37 +9,51 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuestProyekController;
 use App\Http\Controllers\TahapanProyekController;
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
+
+/*
+|--------------------------------------------------------------------------
+| PUBLIC ROUTES (TANPA LOGIN)
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/auth/login', [AuthController::class, 'index'])->name('guest.login');
+Route::post('/auth/login', [AuthController::class, 'login']);
 
 Route::get('/guest/proyek', [GuestProyekController::class, 'index'])->name('guest.proyek');
 
-
-//Route::get('/', [LoginController::class, 'index'])->name('guest.login');
 Route::post('/login-proses', [LoginController::class, 'loginProses'])->name('login.proses');
 
-Route::get('/', [DashboardController::class, 'index'])->name('guest.dashboard');
 
-// Route::post('question/store', [AuthController::class, 'store'])
-// 		->name('question.store');
+/*
+|--------------------------------------------------------------------------
+| REDIRECT DEFAULT
+|--------------------------------------------------------------------------
+*/
 
-Route::get('/auth/login', [AuthController::class, 'index'])->name('guest.login');
+Route::get('/', function () {
+    return redirect()->route('dashboard');
+});
 
-Route::post('/auth/login', [AuthController::class, 'login']);
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('guest.dashboard');
+/*
+|--------------------------------------------------------------------------
+| PROTECTED ROUTES (WAJIB LOGIN)
+|--------------------------------------------------------------------------
+*/
 
-Route::resource('proyek', ProyekController::class);
+Route::middleware('auth.access')->group(function () {
 
-Route::get('/data-proyek', fn() => redirect()->route('proyek.index'));
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::resource('users', UserController::class);
+    Route::resource('proyek', ProyekController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('tahapan', TahapanProyekController::class);
 
-Route::get('/logout', [LoginController::class, 'logout'])->name('logout.get');
+    Route::get('/data-proyek', fn() => redirect()->route('proyek.index'));
 
-Route::get('/about', function () {
-    return view('pages.about.index');
-})->name('about');
+    Route::get('/about', function () {
+        return view('pages.about.index');
+    })->name('about');
 
-Route::resource('tahapan', TahapanProyekController::class);
+    Route::get('/logout', [LoginController::class, 'logout'])->name('logout.get');
+});

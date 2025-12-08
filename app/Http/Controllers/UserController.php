@@ -1,8 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
@@ -16,7 +16,7 @@ class UserController extends Controller
         if ($request->search) {
             $query->where(function ($q) use ($request) {
                 $q->where('name', 'like', "%{$request->search}%")
-                  ->orWhere('email', 'like', "%{$request->search}%");
+                    ->orWhere('email', 'like', "%{$request->search}%");
             });
         }
 
@@ -31,16 +31,21 @@ class UserController extends Controller
         return view('pages.user.index', compact('users'));
     }
 
-    public function create() {
+    public function create()
+    {
         return view('pages.user.create');
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
+            'role'     => 'required|in:admin,user', // ⬅ VALIDASI ROLE
         ]);
+
+        $validated['password'] = Hash::make($validated['password']);
 
         $validated['password'] = Hash::make($validated['password']);
 
@@ -49,18 +54,21 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan.');
     }
 
-    public function edit(User $user) {
+    public function edit(User $user)
+    {
         return view('pages.user.edit', compact('user'));
     }
 
-    public function update(Request $request, User $user) {
+    public function update(Request $request, User $user)
+    {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
+            'name'     => 'required|string|max:255',
+            'email'    => ['required', 'email', Rule::unique('users')->ignore($user->id)],
             'password' => 'nullable|string|min:6|confirmed',
+            'role'     => 'required|in:admin,user', // ⬅ VALIDASI ROLE
         ]);
 
-        if (!empty($validated['password'])) {
+        if (! empty($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
         } else {
             unset($validated['password']);
@@ -71,7 +79,8 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User berhasil diperbarui.');
     }
 
-    public function destroy(User $user) {
+    public function destroy(User $user)
+    {
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
     }

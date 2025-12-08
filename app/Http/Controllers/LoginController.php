@@ -25,7 +25,9 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
-            return redirect()->route('guest.dashboard');
+
+            // FIX ➜ arahkan ke dashboard
+            return redirect()->route('dashboard');
         }
 
         return back()->with('error', 'Email atau password salah.');
@@ -37,6 +39,7 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect()->route('guest.login');
     }
 }

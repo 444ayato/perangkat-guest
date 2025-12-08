@@ -18,15 +18,15 @@ class UserSeeder extends Seeder
             'password' => Hash::make('azra123'),
         ]);
 
-        // Generate 100 user
-        $faker = Faker::create('id_ID');
+        // // Generate 100 user
+        // $faker = Faker::create('id_ID');
 
-        for ($i = 1; $i <= 100; $i++) {
-            User::create([
-                'name' => $faker->name(),
-                'email' => "user$i@mail.com",
-                'password' => Hash::make('password'),
-            ]);
-        }
+        // for ($i = 1; $i <= 100; $i++) {
+        //     User::create([
+        //         'name' => $faker->name(),
+        //         'email' => "user@mail.com",
+        //         'password' => Hash::make('password'),
+        //     ]);
+        // }
     }
 }

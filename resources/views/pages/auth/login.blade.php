@@ -202,8 +202,8 @@
       <div class="text">
         <h2>Selamat Datang di Sistem Pembangunan & Monitoring Proyek</h2>
         <p>
-          Platform digital terpadu yang mendukung pengelolaan dan pengawasan proyek pembangunan secara profesional, 
-          efisien, dan transparan. Sistem ini membantu memastikan setiap tahapan pelaksanaan berjalan tepat waktu, 
+          Platform digital terpadu yang mendukung pengelolaan dan pengawasan proyek pembangunan secara profesional,
+          efisien, dan transparan. Sistem ini membantu memastikan setiap tahapan pelaksanaan berjalan tepat waktu,
           sesuai anggaran, dan terdokumentasi dengan baik.
         </p>
       </div>
@@ -219,7 +219,7 @@
       @endif
 
       <form method="POST" action="{{ route('login.proses') }}">
-        @csrf
+    @csrf
         <div class="form-group">
           <i class="fa fa-envelope"></i>
           <input type="email" name="email" placeholder="Alamat Email" required>

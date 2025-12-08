@@ -40,6 +40,7 @@
 
                         <h5 class="fw-bold mb-1">{{ $user->name }}</h5>
                         <p class="text-muted mb-4">{{ $user->email }}</p>
+                        <p class="badge bg-secondary">{{ $user->role }}</p>
 
                         <div class="d-flex justify-content-center gap-2">
                             <a href="{{ route('users.edit', $user) }}" class="btn btn-warning btn-sm px-3">

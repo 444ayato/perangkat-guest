@@ -1,42 +1,33 @@
 <?php
-
 namespace App\Http\Controllers;
 
+use App\Models\Media;
 use App\Models\Proyek;
 use Illuminate\Http\Request;
 
 class ProyekController extends Controller
 {
-    /**
-     * Tampilkan daftar proyek (Guest + Admin)
-     * lengkap dengan Search, Filter, dan Pagination.
-     */
     public function index(Request $request)
     {
         $query = Proyek::orderBy('created_at', 'desc');
 
-        // Search by Nama Proyek / Kode Proyek
         if ($request->search) {
             $query->where(function ($q) use ($request) {
                 $q->where('nama_proyek', 'like', '%' . $request->search . '%')
-                  ->orWhere('kode_proyek', 'like', '%' . $request->search . '%');
+                    ->orWhere('kode_proyek', 'like', '%' . $request->search . '%');
             });
         }
 
-        // Filter Tahun
         if ($request->tahun) {
             $query->where('tahun', $request->tahun);
         }
 
-        // Filter Lokasi
         if ($request->lokasi) {
             $query->where('lokasi', 'like', '%' . $request->lokasi . '%');
         }
 
-        // Pagination
         $proyek = $query->paginate(5)->withQueryString();
 
-        // Data dropdown Tahun
         $tahunList = Proyek::select('tahun')
             ->groupBy('tahun')
             ->orderBy('tahun', 'desc')
@@ -60,12 +51,29 @@ class ProyekController extends Controller
             'anggaran'    => 'nullable|numeric|min:0',
             'sumber_dana' => 'nullable|string|max:100',
             'deskripsi'   => 'nullable|string',
+
+            'media.*'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        Proyek::create($validated);
+        unset($validated['media']);
 
-        return redirect()
-            ->route('proyek.index')
+        $proyek = Proyek::create($validated);
+
+        if ($request->hasFile('media')) {
+            foreach ($request->file('media') as $file) {
+
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->storeAs('media/proyek/', $filename, 'public');
+
+                Media::create([
+                    'ref_table' => 'proyek',
+                    'ref_id'    => $proyek->proyek_id, // FIX DISINI
+                    'file_name' => $filename,
+                ]);
+            }
+        }
+
+        return redirect()->route('proyek.index')
             ->with('success', 'Data proyek berhasil ditambahkan!');
     }
 
@@ -87,19 +95,36 @@ class ProyekController extends Controller
 
         $validated = $request->validate([
             'kode_proyek' =>
-                'required|max:20|unique:proyek,kode_proyek,' . $proyek->proyek_id . ',proyek_id',
+            'required|max:20|unique:proyek,kode_proyek,' . $proyek->proyek_id . ',proyek_id',
             'nama_proyek' => 'required|string|max:255',
             'lokasi'      => 'required|string|max:255',
             'tahun'       => 'nullable|digits:4|integer|min:2000|max:' . (date('Y') + 1),
             'anggaran'    => 'nullable|numeric|min:0',
             'sumber_dana' => 'nullable|string|max:100',
             'deskripsi'   => 'nullable|string',
+
+            'media.*'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        unset($validated['media']);
 
         $proyek->update($validated);
 
-        return redirect()
-            ->route('proyek.index')
+        if ($request->hasFile('media')) {
+            foreach ($request->file('media') as $file) {
+
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->storeAs('media/proyek/', $filename, 'public');
+
+                Media::create([
+                    'ref_table' => 'proyek',
+                    'ref_id'    => $proyek->proyek_id, // FIX DISINI
+                    'file_name' => $filename,
+                ]);
+            }
+        }
+
+        return redirect()->route('proyek.index')
             ->with('success', 'Data proyek berhasil diperbarui!');
     }
 
@@ -107,8 +132,7 @@ class ProyekController extends Controller
     {
         Proyek::findOrFail($id)->delete();
 
-        return redirect()
-            ->route('proyek.index')
+        return redirect()->route('proyek.index')
             ->with('success', 'Data proyek berhasil dihapus!');
     }
 }

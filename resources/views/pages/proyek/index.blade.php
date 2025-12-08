@@ -40,42 +40,66 @@
 
             </form>
 
-            {{-- LIST PROYEK --}}
-            @forelse ($proyek as $item)
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body">
-                        <h4 class="fw-bold">{{ $item->nama_proyek }}</h4>
+            {{-- LIST PROYEK DALAM GRID --}}
+            <div class="row">
+                @forelse ($proyek as $item)
+                    <div class="col-md-4 mb-4"> {{-- 3 card per baris --}}
+                        <div class="card shadow-sm h-100 border-0"
+                            style="border-radius: 12px;">
 
-                        <p class="text-muted">
-                            <strong>Kode:</strong> {{ $item->kode_proyek }} <br>
-                            <strong>Tahun:</strong> {{ $item->tahun }} <br>
-                            <strong>Lokasi:</strong> {{ $item->lokasi }}
-                        </p>
+                            <div class="card-body">
 
-                        <p><strong>Anggaran:</strong> Rp {{ number_format($item->anggaran, 0, ',', '.') }}</p>
+                                <h4 class="fw-bold text-primary">{{ $item->nama_proyek }}</h4>
 
-                        <p><strong>Sumber Dana:</strong> {{ $item->sumber_dana }}</p>
+                                <p class="text-muted mb-1"><strong>Kode:</strong> {{ $item->kode_proyek }}</p>
+                                <p class="text-muted mb-1"><strong>Tahun:</strong> {{ $item->tahun }}</p>
+                                <p class="text-muted mb-3"><strong>Lokasi:</strong> {{ $item->lokasi }}</p>
 
-                        <p><strong>Deskripsi:</strong> {{ $item->deskripsi }}</p>
+                                <p><strong>Anggaran:</strong> Rp {{ number_format($item->anggaran, 0, ',', '.') }}</p>
+                                <p><strong>Sumber Dana:</strong> {{ $item->sumber_dana }}</p>
+                                <p><strong>Deskripsi:</strong> {{ $item->deskripsi }}</p>
 
-                        <div class="d-flex justify-content-end">
-                            <a href="{{ route('proyek.edit', $item->proyek_id) }}" class="btn btn-warning btn-sm me-2">
-                                Edit
-                            </a>
+                                {{-- BUTTON AKSI (SEJAJAR + SAMA LEBAR) --}}
+                                <div class="d-flex gap-2 mt-3">
 
-                            <form action="{{ route('proyek.destroy', $item->proyek_id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-danger btn-sm"
-                                    onclick="return confirm('Yakin?')">Hapus</button>
-                            </form>
+                                    {{-- DETAIL --}}
+                                    <a href="{{ route('proyek.show', $item->proyek_id) }}"
+                                       class="btn btn-info btn-sm flex-grow-1 text-white">
+                                        Detail
+                                    </a>
+
+                                    {{-- EDIT --}}
+                                    <a href="{{ route('proyek.edit', $item->proyek_id) }}"
+                                       class="btn btn-warning btn-sm flex-grow-1">
+                                        Edit
+                                    </a>
+
+                                    {{-- HAPUS --}}
+                                    <form action="{{ route('proyek.destroy', $item->proyek_id) }}"
+                                          method="POST" class="flex-grow-1 m-0 p-0">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                                class="btn btn-danger btn-sm w-100"
+                                                onclick="return confirm('Yakin ingin menghapus?')">
+                                            Hapus
+                                        </button>
+                                    </form>
+
+                                </div>
+
+                            </div>
                         </div>
-
                     </div>
-                </div>
-            @empty
-                <div class="alert alert-info text-center">Tidak ada data proyek.</div>
-            @endforelse
+
+                @empty
+                    <div class="col-12">
+                        <div class="alert alert-info text-center">
+                            Tidak ada data proyek.
+                        </div>
+                    </div>
+                @endforelse
+            </div>
 
             {{-- PAGINATION --}}
             <div class="mt-4">

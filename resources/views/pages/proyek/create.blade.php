@@ -7,22 +7,40 @@
                 <h5 class="mb-0">➕ Tambah Data Proyek</h5>
             </div>
             <div class="card-body">
-                <form action="{{ route('proyek.store') }}" method="POST">
+
+                {{-- TAMPILKAN VALIDATION ERROR --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <strong>Terjadi kesalahan:</strong>
+                        <ul class="mt-2 mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form action="{{ route('proyek.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
+
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Kode Proyek</label>
-                            <input type="text" name="kode_proyek" value="{{ old('kode_proyek') }}" class="form-control"
-                                required>
+                            <input type="text" name="kode_proyek"
+                                   value="{{ old('kode_proyek') }}"
+                                   class="form-control" required>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Nama Proyek</label>
-                            <input type="text" name="nama_proyek" value="{{ old('nama_proyek') }}" class="form-control"
-                                required>
+                            <input type="text" name="nama_proyek"
+                                   value="{{ old('nama_proyek') }}"
+                                   class="form-control" required>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Lokasi</label>
-                            <input type="text" name="lokasi" value="{{ old('lokasi') }}" class="form-control" required>
+                            <input type="text" name="lokasi"
+                                   value="{{ old('lokasi') }}"
+                                   class="form-control" required>
                         </div>
                     </div>
 
@@ -33,17 +51,26 @@
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Anggaran (Rp)</label>
-                            <input type="number" name="anggaran" value="{{ old('anggaran') }}" class="form-control">
+                            <input type="number" name="anggaran"
+                                   value="{{ old('anggaran') }}"
+                                   class="form-control">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Sumber Dana</label>
-                            <input type="text" name="sumber_dana" value="{{ old('sumber_dana') }}" class="form-control">
+                            <input type="text" name="sumber_dana"
+                                   value="{{ old('sumber_dana') }}"
+                                   class="form-control">
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">Deskripsi</label>
                         <textarea name="deskripsi" class="form-control" rows="4">{{ old('deskripsi') }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Upload Foto Proyek</label>
+                        <input type="file" name="media[]" class="form-control" multiple>
                     </div>
 
                     <button type="submit" class="btn btn-success">Simpan</button>
