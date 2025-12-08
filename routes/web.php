@@ -1,14 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\ProyekController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GuestProyekController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ProyekController;
 use App\Http\Controllers\TahapanProyekController;
-
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,7 +22,6 @@ Route::get('/guest/proyek', [GuestProyekController::class, 'index'])->name('gues
 
 Route::post('/login-proses', [LoginController::class, 'loginProses'])->name('login.proses');
 
-
 /*
 |--------------------------------------------------------------------------
 | REDIRECT DEFAULT
@@ -34,7 +32,6 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
-
 /*
 |--------------------------------------------------------------------------
 | PROTECTED ROUTES (WAJIB LOGIN)
@@ -43,7 +40,11 @@ Route::get('/', function () {
 
 Route::middleware('auth.access')->group(function () {
 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    //Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware('auth.access')
+    ->name('guest.dashboard');
+
 
     Route::resource('proyek', ProyekController::class);
     Route::resource('users', UserController::class);
@@ -56,4 +57,7 @@ Route::middleware('auth.access')->group(function () {
     })->name('about');
 
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout.get');
+    Route::resource('kontraktor', \App\Http\Controllers\KontraktorController::class);
+    Route::resource('lokasi', \App\Http\Controllers\LokasiProyekController::class);
+    Route::resource('progres', \App\Http\Controllers\ProgresProyekController::class);
 });

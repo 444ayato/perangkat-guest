@@ -1,11 +1,9 @@
 <?php
-
 namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Faker\Factory as Faker;
 
 class UserSeeder extends Seeder
 {
@@ -13,8 +11,9 @@ class UserSeeder extends Seeder
     {
         // User utama
         User::create([
-            'name' => 'Azra',
-            'email' => 'azra@pcr.ac.id',
+            'name'     => 'Azra',
+            'email'    => 'azra@pcr.ac.id',
+            'role'     => 'admin',
             'password' => Hash::make('azra123'),
         ]);
 

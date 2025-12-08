@@ -144,6 +144,41 @@
                 <h2>Selamat Datang, {{ session('user')->name ?? 'User' }}!</h2>
                 <p>Anda berhasil login ke Dashboard.</p>
             </div>
+
+            <!-- Card Statistik Ringkas -->
+            <div class="container mt-4">
+                <div class="row text-center">
+
+                    <div class="col-md-3">
+                        <div class="p-2 shadow-sm bg-white rounded">
+                            <h6>Proyek</h6>
+                            <h4>{{ $total_proyek ?? 0 }}</h4>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="p-2 shadow-sm bg-white rounded">
+                            <h6>Lokasi</h6>
+                            <h4>{{ $total_lokasi ?? 0 }}</h4>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="p-2 shadow-sm bg-white rounded">
+                            <h6>Kontraktor</h6>
+                            <h4>{{ $total_kontraktor ?? 0 }}</h4>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="p-2 shadow-sm bg-white rounded">
+                            <h6>User</h6>
+                            <h4>{{ $total_user ?? 0 }}</h4>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         @endif
     </header>
 </body>

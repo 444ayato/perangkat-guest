@@ -4,29 +4,24 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateLokasiProyekTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
-{
-    Schema::create('lokasi_proyek', function (Blueprint $table) {
-        $table->id('lokasi_id');            // PK
-        $table->foreignId('proyek_id')->constrained('proyek','proyek_id')->onDelete('cascade');
-        $table->decimal('lat', 10, 7)->nullable();
-        $table->decimal('lng', 10, 7)->nullable();
-        $table->json('geojson')->nullable(); // jika perlu geojson
-        $table->timestamps();
-    });
-}
+    {
+        Schema::create('lokasi_proyek', function (Blueprint $table) {
+            $table->id('lokasi_id');
+            $table->unsignedBigInteger('proyek_id');
+            $table->decimal('lat', 10, 7)->nullable();
+            $table->decimal('lng', 10, 7)->nullable();
+            $table->longText('geojson')->nullable();
+            $table->timestamps();
 
+            $table->foreign('proyek_id')->references('proyek_id')->on('proyek')->onDelete('cascade');
+        });
+    }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('lokasi_proyek');
     }
-};
+}
