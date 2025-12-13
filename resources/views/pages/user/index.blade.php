@@ -34,8 +34,16 @@
                 <div class="card border-0 shadow-sm h-100 user-card">
                     <div class="card-body text-center p-4">
 
+                        {{-- FOTO USER --}}
                         <div class="mb-3">
-                            <i class="fa fa-user-circle text-primary" style="font-size: 70px;"></i>
+                            @if($user->photo)
+                                <img src="{{ asset('storage/' . $user->photo) }}"
+                                     class="rounded-circle"
+                                     width="80" height="80"
+                                     style="object-fit: cover;">
+                            @else
+                                <i class="fa fa-user-circle text-primary" style="font-size: 80px;"></i>
+                            @endif
                         </div>
 
                         <h5 class="fw-bold mb-1">{{ $user->name }}</h5>
@@ -43,20 +51,27 @@
                         <p class="badge bg-secondary">{{ $user->role }}</p>
 
                         <div class="d-flex justify-content-center gap-2">
-                            <a href="{{ route('users.edit', $user) }}" class="btn btn-warning btn-sm px-3">
-                                <i class="fa fa-edit me-1"></i> Edit
-                            </a>
 
-                            <form action="{{ route('users.destroy', $user) }}" method="POST"
-                                  onsubmit="return confirm('Yakin ingin menghapus user ini?')">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-danger btn-sm px-3">
-                                    <i class="fa fa-trash me-1"></i> Hapus
-                                </button>
-                            </form>
-                        </div>
+    {{-- DETAIL --}}
+    <a href="{{ route('users.show', $user) }}" class="btn btn-info btn-sm px-3 text-white">
+        <i class="fa fa-eye me-1"></i> Detail
+    </a>
 
+    {{-- EDIT --}}
+    <a href="{{ route('users.edit', $user) }}" class="btn btn-warning btn-sm px-3">
+        <i class="fa fa-edit me-1"></i> Edit
+    </a>
+
+    {{-- DELETE --}}
+    <form action="{{ route('users.destroy', $user) }}" method="POST"
+          onsubmit="return confirm('Yakin ingin menghapus user ini?')">
+        @csrf
+        @method('DELETE')
+        <button class="btn btn-danger btn-sm px-3">
+            <i class="fa fa-trash me-1"></i> Hapus
+        </button>
+    </form>
+</div>
                     </div>
                 </div>
             </div>

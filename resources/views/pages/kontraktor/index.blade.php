@@ -1,54 +1,103 @@
 @extends('layouts.guest.app')
 
+@section('title', 'Data Kontraktor')
+
 @section('content')
-<div class="container">
-    <h2 class="mb-3">Data Kontraktor</h2>
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-hard-hat me-2"></i>Data Kontraktor</h1>
+        <a href="{{ route('kontraktor.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i> Tambah Kontraktor
+        </a>
+    </div>
 
-    <a href="{{ route('kontraktor.create') }}" class="btn btn-primary mb-3">
-        + Tambah Kontraktor
-    </a>
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Proyek</th>
-                <th>Nama Kontraktor</th>
-                <th>Penanggung Jawab</th>
-                <th>Kontak</th>
-                <th style="width:160px">Aksi</th>
-            </tr>
-        </thead>
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
-        <tbody>
-            @foreach ($data as $item)
-                <tr>
-                    <td>{{ $item->kontraktor_id }}</td>
-                    <td>{{ $item->proyek->nama }}</td>
-                    <td>{{ $item->nama }}</td>
-                    <td>{{ $item->penanggung_jawab }}</td>
-                    <td>{{ $item->kontak }}</td>
-
-                    <td>
-                        <a href="{{ route('kontraktor.show', $item->kontraktor_id) }}"
-                           class="btn btn-info btn-sm">Detail</a>
-
-                        <a href="{{ route('kontraktor.edit', $item->kontraktor_id) }}"
-                           class="btn btn-warning btn-sm">Edit</a>
-
-                        <form action="{{ route('kontraktor.destroy', $item->kontraktor_id) }}"
-                              method="POST" class="d-inline">
-                            @csrf @method('DELETE')
-                            <button onclick="return confirm('Yakin ingin hapus?')"
-                                    class="btn btn-danger btn-sm">
-                                Hapus
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-
-    </table>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Kontraktor</th>
+                            <th>Penanggung Jawab</th>
+                            <th>Kontak</th>
+                            <th>NPWP</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($kontraktors as $kontraktor)
+                        <tr>
+                            <td>{{ $loop->iteration + ($kontraktors->currentPage() - 1) * $kontraktors->perPage() }}</td>
+                            <td>
+                                <strong>{{ $kontraktor->nama_kontraktor }}</strong>
+                            </td>
+                            <td>{{ $kontraktor->penanggung_jawab }}</td>
+                            <td>
+                                @if($kontraktor->kontak)
+                                    <i class="fas fa-phone me-1"></i> {{ $kontraktor->kontak }}
+                                @endif
+                                @if($kontraktor->email)
+                                    <br><i class="fas fa-envelope me-1"></i> {{ $kontraktor->email }}
+                                @endif
+                            </td>
+                            <td>{{ $kontraktor->npwp ?? '-' }}</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ route('kontraktor.show', $kontraktor->kontraktor_id) }}" 
+                                       class="btn btn-sm btn-info" title="Detail">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ route('kontraktor.edit', $kontraktor->kontraktor_id) }}" 
+                                       class="btn btn-sm btn-warning" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="{{ route('kontraktor.destroy', $kontraktor->kontraktor_id) }}" 
+                                          method="POST" 
+                                          class="d-inline"
+                                          onsubmit="return confirm('Hapus kontraktor ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Hapus">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="6" class="text-center py-4">
+                                <div class="text-muted">
+                                    <i class="fas fa-hard-hat fa-2x mb-3"></i>
+                                    <p>Belum ada data kontraktor</p>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center mt-4">
+                {{ $kontraktors->links() }}
+            </div>
+        </div>
+    </div>
 </div>
 @endsection

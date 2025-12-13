@@ -1,4 +1,5 @@
 <?php
+// app/Models/Proyek.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -6,35 +7,44 @@ use Illuminate\Database\Eloquent\Model;
 class Proyek extends Model
 {
     protected $table = 'proyek';
+    
     protected $primaryKey = 'proyek_id';
-    protected $guarded = [];
+    
     public $incrementing = true;
-    protected $keyType = 'int';
-
-    // 1 proyek punya banyak tahapan
-    public function tahapan() {
-        return $this->hasMany(TahapanProyek::class, 'proyek_id', 'proyek_id');
-    }
-
-    // 1 proyek punya banyak progres
-    public function progres() {
-        return $this->hasMany(ProgresProyek::class, 'proyek_id', 'proyek_id');
-    }
-
-    // 1 proyek punya banyak lokasi
-    public function lokasi() {
-        return $this->hasMany(LokasiProyek::class, 'proyek_id', 'proyek_id');
-    }
-
-    // 1 proyek punya banyak kontraktor
-    public function kontraktor() {
-        return $this->hasMany(Kontraktor::class, 'proyek_id', 'proyek_id');
-    }
-
-    // media proyek
-    public function media()
+    
+    protected $fillable = [
+        'kode_proyek',
+        'nama_proyek',
+        'tahun',
+        'lokasi', // kolom string lokasi di tabel proyek
+        'lokasi_id', // foreign key ke lokasi_proyek
+        'kontraktor_id',
+        'anggaran',
+        'sumber_dana',
+        'deskripsi'
+    ];
+    
+    // Relasi ke lokasi_proyek (one-to-one)
+    public function lokasi()
     {
-        return $this->hasMany(Media::class, 'ref_id', 'proyek_id')
-                     ->where('ref_table', 'proyek');
+        return $this->hasOne(LokasiProyek::class, 'proyek_id', 'proyek_id');
+    }
+    
+    // Relasi ke kontraktor
+    public function kontraktor()
+    {
+        return $this->belongsTo(Kontraktor::class, 'kontraktor_id', 'kontraktor_id');
+    }
+    
+    // Relasi ke tahapan (jika ada)
+    public function tahapan()
+    {
+        return $this->hasOne(TahapanProyek::class, 'proyek_id', 'proyek_id');
+    }
+    
+    // Relasi ke progres
+    public function progres()
+    {
+        return $this->hasMany(ProgresProyek::class, 'proyek_id', 'proyek_id');
     }
 }

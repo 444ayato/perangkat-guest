@@ -1,4 +1,5 @@
 <?php
+// app/Models/Kontraktor.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -6,11 +7,29 @@ use Illuminate\Database\Eloquent\Model;
 class Kontraktor extends Model
 {
     protected $table = 'kontraktor';
+    
     protected $primaryKey = 'kontraktor_id';
-    protected $guarded = [];
-
+    
+    public $incrementing = true;
+    
+    protected $fillable = [
+        'nama_kontraktor',
+        'penanggung_jawab',
+        'kontak',
+        'alamat',
+        'email',
+        'telepon',
+        'npwp'
+    ];
+    
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime'
+    ];
+    
+    // Relasi dengan proyek - UPDATE INI
     public function proyek()
     {
-        return $this->belongsTo(Proyek::class, 'proyek_id', 'proyek_id');
+        return $this->hasMany(Proyek::class, 'kontraktor_id', 'kontraktor_id');
     }
 }

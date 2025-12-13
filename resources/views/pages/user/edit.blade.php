@@ -4,7 +4,7 @@
 <div class="container">
     <h3>Edit User</h3>
 
-    <form action="{{ route('users.update', $user) }}" method="POST">
+    <form action="{{ route('users.update', $user) }}" method="POST" enctype="multipart/form-data">
         @method('PUT')
         @include('pages.user.form', ['buttonText' => 'Perbarui', 'user' => $user])
     </form>

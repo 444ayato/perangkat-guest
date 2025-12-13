@@ -16,21 +16,33 @@
     @error('email') <div class="text-danger">{{ $message }}</div> @enderror
 </div>
 
+{{-- FOTO --}}
+<div class="mb-3">
+    <label>Foto Profil</label>
+    <input type="file" name="photo" class="form-control">
+    @error('photo') <div class="text-danger">{{ $message }}</div> @enderror
+
+    @isset($user)
+        @if($user->photo)
+            <div class="mt-2">
+                <img src="{{ asset('storage/' . $user->photo) }}"
+                     width="100" class="rounded">
+            </div>
+        @endif
+    @endisset
+</div>
+
 {{-- ROLE --}}
 <div class="mb-3">
     <label>Role</label>
     <select name="role" class="form-control">
-        <option value="admin" {{ old('role', $user->role ?? '') == 'admin' ? 'selected' : '' }}>
-            Admin
-        </option>
-        <option value="user" {{ old('role', $user->role ?? '') == 'user' ? 'selected' : '' }}>
-            User
-        </option>
+        <option value="admin" {{ old('role', $user->role ?? '') == 'admin' ? 'selected' : '' }}>Admin</option>
+        <option value="user" {{ old('role', $user->role ?? '') == 'user' ? 'selected' : '' }}>User</option>
     </select>
     @error('role') <div class="text-danger">{{ $message }}</div> @enderror
 </div>
 
-{{-- PASSWORD (KHUSUS CREATE) --}}
+{{-- PASSWORD CREATE --}}
 @unless(isset($user))
     <div class="mb-3">
         <label>Password</label>
@@ -44,10 +56,10 @@
     </div>
 @endunless
 
-{{-- PASSWORD (KHUSUS EDIT) --}}
+{{-- PASSWORD EDIT --}}
 @isset($user)
     <div class="mb-3">
-        <label>Password Baru (opsional)</label>
+        <label>Password Baru (Opsional)</label>
         <input type="password" name="password" class="form-control">
         @error('password') <div class="text-danger">{{ $message }}</div> @enderror
     </div>
@@ -55,12 +67,6 @@
     <div class="mb-3">
         <label>Konfirmasi Password Baru</label>
         <input type="password" name="password_confirmation" class="form-control">
-    </div>
-
-    <div class="mb-3">
-        <label>Password Lama</label>
-        <input type="password" name="current_password" class="form-control">
-        @error('current_password') <div class="text-danger">{{ $message }}</div> @enderror
     </div>
 @endisset
 

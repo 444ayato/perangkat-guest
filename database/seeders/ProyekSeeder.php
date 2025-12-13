@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\Proyek;
 use Faker\Factory as Faker;
 
 class ProyekSeeder extends Seeder
@@ -11,20 +11,17 @@ class ProyekSeeder extends Seeder
     public function run(): void
     {
         $faker = Faker::create('id_ID');
-        $data = [];
 
-        for ($i = 1; $i <= 100; $i++) {
-            $data[] = [
+        for ($i = 1; $i <= 50; $i++) {
+            Proyek::create([
                 'kode_proyek' => 'PR' . str_pad($i, 3, '0', STR_PAD_LEFT),
-                'nama_proyek' => 'Proyek ' . $faker->streetName(),
-                'tahun'       => rand(2015, 2025),
+                'nama_proyek' => $faker->sentence(3),
+                'tahun'       => $faker->year(),
                 'lokasi'      => $faker->city(),
-                'anggaran'    => rand(100_000_000, 5_000_000_000),
-                'sumber_dana' => $faker->randomElement(['APBD', 'APBN', 'CSR', 'Mandiri']),
-                'deskripsi'   => $faker->sentence(8),
-            ];
+                'anggaran'    => $faker->numberBetween(100000000, 5000000000),
+                'sumber_dana' => $faker->randomElement(['APBN', 'APBD', 'Swasta', 'CSR']),
+                'deskripsi'   => $faker->paragraph(),
+            ]);
         }
-
-        DB::table('proyek')->insert($data);
     }
 }

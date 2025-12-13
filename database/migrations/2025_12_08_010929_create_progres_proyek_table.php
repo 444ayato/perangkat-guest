@@ -4,27 +4,24 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProgresProyekTable extends Migration
+return new class extends Migration
 {
-    public function up()
+    public function up(): void
     {
         Schema::create('progres_proyek', function (Blueprint $table) {
-            $table->id('progres_id');
-            $table->unsignedBigInteger('proyek_id');
-            $table->unsignedBigInteger('tahap_id');
+            $table->id('progress_id');
+            $table->foreignId('proyek_id')->constrained('proyek', 'proyek_id')->onDelete('cascade');
+            $table->foreignId('tahap_id')->constrained('tahapan_proyek', 'tahap_id')->onDelete('cascade');
             $table->decimal('persen_real', 5, 2)->default(0);
             $table->date('tanggal');
             $table->text('catatan')->nullable();
+            $table->string('foto_progres')->nullable();
             $table->timestamps();
-
-            // FK (pastikan tabel proyek & tahapan ada)
-            $table->foreign('proyek_id')->references('proyek_id')->on('proyek')->onDelete('cascade');
-            $table->foreign('tahap_id')->references('tahap_id')->on('tahapan_proyek')->onDelete('cascade');
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('progres_proyek');
     }
-}
+};

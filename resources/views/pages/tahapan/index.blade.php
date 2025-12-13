@@ -39,7 +39,6 @@
                 <table class="table table-bordered table-hover">
                     <thead class="table-dark">
                         <tr>
-                            <th>Proyek</th>
                             <th>Nama Tahap</th>
                             <th class="text-center">Target %</th>
                             <th>Tgl Mulai</th>
@@ -50,7 +49,6 @@
                     <tbody>
                         @foreach ($data as $d)
                             <tr>
-                                <td>{{ $d->proyek->nama_proyek }}</td>
                                 <td>{{ $d->nama_tahap }}</td>
                                 <td class="text-center">{{ $d->target_persen }}%</td>
                                 <td>{{ $d->tgl_mulai }}</td>

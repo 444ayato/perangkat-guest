@@ -75,6 +75,13 @@
             color: #3498db;
         }
 
+        /* 🖼️ Logo Header */
+.logo-header {
+    height: 110px;
+    width: auto;
+    object-fit: contain;
+}
+
         #jetmenu li a {
             font-weight: 600;
         }
@@ -93,6 +100,33 @@
         .welcome-text p {
             color: #555;
         }
+
+        /* Dropdown Menu Styling */
+        #jetmenu ul.dropdown {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        #jetmenu ul.dropdown li {
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        #jetmenu ul.dropdown li:last-child {
+            border-bottom: none;
+        }
+
+        #jetmenu ul.dropdown li a {
+            padding: 10px 20px;
+            color: #333;
+            transition: all 0.3s;
+        }
+
+        #jetmenu ul.dropdown li a:hover {
+            background-color: #3498db;
+            color: white;
+        }
     </style>
 </head>
 
@@ -101,13 +135,13 @@
     <div class="topbar clearfix">
         <div class="container">
             <!-- Tombol Logout (kiri) -->
-            <a href="{{ url('/logout') }}" class="btn btn-danger btn-sm"
+            <a href="{{ route('logout.get') }}" class="btn btn-danger btn-sm"
                 style="font-weight: 600; padding: 6px 14px;">Logout</a>
 
             <!-- Foto Profil (kanan) -->
             <img src="https://i.pinimg.com/originals/48/0a/d4/480ad4ef2dcf7f924f96bbd83fb2ff22.jpg"
                 alt="Profile Picture" class="profile-pic">
-            <span class="profile-name">Halo, {{ session('user')->name ?? 'User' }}!</span>
+            <span class="profile-name text-white">Halo, {{ Auth::user()->name ?? 'User' }}!</span>
         </div>
     </div>
 
@@ -117,10 +151,12 @@
             <div class="site-header clearfix d-flex justify-content-between align-items-center flex-wrap">
                 <!-- Logo / Title -->
                 <div class="site-title">
-                    <a href="{{ url('/dashboard') }}">
-                        <h4>E-<span>PROYEK</span></h4>
-                    </a>
-                </div>
+    <a href="{{ url('/dashboard') }}" class="d-flex align-items-center">
+        <img src="{{ asset('foto logo.jpeg') }}"
+             alt="Logo E-Proyek"
+             class="logo-header">
+    </a>
+</div>
 
                 <!-- Navigation -->
                 <nav id="nav">
@@ -128,11 +164,48 @@
                         <li class="{{ request()->is('dashboard') ? 'active' : '' }}">
                             <a href="{{ url('/dashboard') }}">Home</a>
                         </li>
-                        <li><a href="{{ route('proyek.index') }}">Data Proyek</a></li>
-                        <li><a href="{{ route('tahapan.index') }}">Tahapan Proyek</a></li>
-                        <li><a href="{{ route('users.index') }}">Manajemen User</a></li>
-                        <li><a href="{{ route('about') }}">Tentang</a></li>
-                        <li><a href="#">Kontak</a></li>
+                        
+                        <!-- Data Master Dropdown -->
+                        <li class="{{ request()->is('proyek*') || request()->is('kontraktor*') || request()->is('lokasi*') ? 'active' : '' }}">
+                            <a href="#">Data Master</a>
+                            <ul class="dropdown">
+                                <li class="{{ request()->is('proyek*') ? 'active' : '' }}">
+                                    <a href="{{ route('proyek.index') }}">Data Proyek</a>
+                                </li>
+                                <li class="{{ request()->is('kontraktor*') ? 'active' : '' }}">
+                                    <a href="{{ route('kontraktor.index') }}">Data Kontraktor</a>
+                                </li>
+                                <li class="{{ request()->is('lokasi*') ? 'active' : '' }}">
+                                    <a href="{{ route('lokasi.index') }}">Data Lokasi</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- Monitoring Dropdown -->
+                        <li class="{{ request()->is('tahapan*') || request()->is('progres*') ? 'active' : '' }}">
+                            <a href="#">Monitoring</a>
+                            <ul class="dropdown">
+                                <li class="{{ request()->is('tahapan*') ? 'active' : '' }}">
+                                    <a href="{{ route('tahapan.index') }}">Tahapan Proyek</a>
+                                </li>
+                                <li class="{{ request()->is('progres*') ? 'active' : '' }}">
+                                    <a href="{{ route('progres.index') }}">Progress Proyek</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- Manajemen -->
+                        <li class="{{ request()->is('users*') ? 'active' : '' }}">
+                            <a href="{{ route('users.index') }}">Manajemen User</a>
+                        </li>
+
+                        <!-- Lainnya -->
+                        <li class="{{ request()->is('about*') ? 'active' : '' }}">
+                            <a href="{{ route('about') }}">Tentang</a>
+                        </li>
+                        <li>
+                            <a href="#">Kontak</a>
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -141,7 +214,7 @@
         <!-- 🔹 Welcome Section (Hanya di Dashboard) -->
         @if (request()->is('dashboard'))
             <div class="container welcome-text">
-                <h2>Selamat Datang, {{ session('user')->name ?? 'User' }}!</h2>
+                <h2>Selamat Datang, {{ Auth::user()->name ?? 'User' }}!</h2>
                 <p>Anda berhasil login ke Dashboard.</p>
             </div>
 
@@ -152,28 +225,28 @@
                     <div class="col-md-3">
                         <div class="p-2 shadow-sm bg-white rounded">
                             <h6>Proyek</h6>
-                            <h4>{{ $total_proyek ?? 0 }}</h4>
+                            <h4>{{ $totalProyek ?? 0 }}</h4>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="p-2 shadow-sm bg-white rounded">
                             <h6>Lokasi</h6>
-                            <h4>{{ $total_lokasi ?? 0 }}</h4>
+                            <h4>{{ $totalLokasi ?? 0 }}</h4>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="p-2 shadow-sm bg-white rounded">
                             <h6>Kontraktor</h6>
-                            <h4>{{ $total_kontraktor ?? 0 }}</h4>
+                            <h4>{{ $totalKontraktor ?? 0 }}</h4>
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         <div class="p-2 shadow-sm bg-white rounded">
                             <h6>User</h6>
-                            <h4>{{ $total_user ?? 0 }}</h4>
+                            <h4>{{ $totalUser ?? 0 }}</h4>
                         </div>
                     </div>
 
@@ -182,5 +255,4 @@
         @endif
     </header>
 </body>
-
 </html>

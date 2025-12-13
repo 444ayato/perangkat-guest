@@ -24,7 +24,7 @@ Route::post('/login-proses', [LoginController::class, 'loginProses'])->name('log
 
 /*
 |--------------------------------------------------------------------------
-| REDIRECT DEFAULT
+| DEFAULT REDIRECT
 |--------------------------------------------------------------------------
 */
 
@@ -40,24 +40,33 @@ Route::get('/', function () {
 
 Route::middleware('auth.access')->group(function () {
 
-    //Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware('auth.access')
-    ->name('guest.dashboard');
+    // Dashboard (nama route diperbaiki)
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    });
 
-
+    // Resource routes
     Route::resource('proyek', ProyekController::class);
     Route::resource('users', UserController::class);
     Route::resource('tahapan', TahapanProyekController::class);
-
+    Route::resource('progres', \App\Http\Controllers\ProgresProyekController::class)
+    ->parameters([
+        'progres' => 'progre'  // Ini mapping: URL parameter = 'progre', model = 'progres'
+    ]);
+    Route::resource('lokasi', \App\Http\Controllers\LokasiProyekController::class);
+    Route::resource('kontraktor', \App\Http\Controllers\KontraktorController::class);
+    // Redirect helper
     Route::get('/data-proyek', fn() => redirect()->route('proyek.index'));
 
+    // About page
     Route::get('/about', function () {
         return view('pages.about.index');
     })->name('about');
 
+    // Logout
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout.get');
-    Route::resource('kontraktor', \App\Http\Controllers\KontraktorController::class);
-    Route::resource('lokasi', \App\Http\Controllers\LokasiProyekController::class);
-    Route::resource('progres', \App\Http\Controllers\ProgresProyekController::class);
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

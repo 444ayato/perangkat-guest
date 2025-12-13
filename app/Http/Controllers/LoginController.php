@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    // Tampilkan form login
+    // Tampilkan halaman login
     public function index()
     {
         return view('pages.auth.login');
@@ -17,16 +17,17 @@ class LoginController extends Controller
     public function loginProses(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required|email',
             'password' => 'required',
         ]);
 
         $credentials = $request->only('email', 'password');
 
+        // cek login
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
 
-            // FIX ➜ arahkan ke dashboard
+            // arahkan ke route dashboard yang benar
             return redirect()->route('dashboard');
         }
 
