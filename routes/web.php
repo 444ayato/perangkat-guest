@@ -68,6 +68,6 @@ Route::middleware('auth.access')->group(function () {
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout.get');
 });
 
-Auth::routes();
+// Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
