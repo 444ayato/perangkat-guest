@@ -1,5 +1,4 @@
 <?php
-// app/Models/Kontraktor.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;

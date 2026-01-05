@@ -404,6 +404,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
         .chart-title {
@@ -418,15 +419,14 @@
 
         /* ===== BAR CHART STYLE ===== */
         .chart-container {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-around;
-            height: 220px;
-            padding: 15px 10px;
-            gap: 12px;
-            flex: 1;
-            margin-bottom: 10px;
-        }
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    min-height: 260px; /* ⬅️ ganti dari height */
+    padding: 20px 10px 40px; /* ruang label */
+    gap: 12px;
+    flex: 1;
+}
 
         .bar-item {
             flex: 1;
@@ -438,16 +438,18 @@
         }
 
         .bar-label {
-            font-size: 11px;
-            color: #5a6c7d;
-            margin-top: 8px;
-            text-align: center;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
-        }
+    font-size: 11px;
+    color: #5a6c7d;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: 600;
+
+    white-space: normal;       /* ⬅️ penting */
+    word-break: break-word;
+    line-height: 1.3;
+    max-height: 2.6em;         /* max 2 baris */
+    overflow: hidden;
+}
 
         .bar-wrapper {
             flex: 1;
@@ -464,26 +466,27 @@
             position: relative;
             transition: height 0.8s ease;
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: center;
             background: linear-gradient(to top, #3b82f6, #60a5fa);
             box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
         }
 
         .bar-value {
-            position: absolute;
-            top: -25px;
+            position: static;
+            top: -20px; /* dari -25px */
             left: 0;
             right: 0;
             text-align: center;
             font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
             color: #3b82f6;
-            background: white;
+            background: rgba(255,255,255,0.9);
             padding: 2px 6px;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             width: fit-content;
+            margin-bottom: 6px;
             margin: 0 auto;
         }
 
